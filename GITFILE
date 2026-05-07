@@ -1,0 +1,123 @@
+"use client";
+
+import { Button } from "@/components/ui/button";
+import { Navbar } from "@/components/navbar";
+import { useAuth } from "@/hooks/use-auth";
+import Link from "next/link";
+import { ShieldCheck, ClipboardList, Zap, ArrowRight, Heart, HeartPulse } from "lucide-react";
+import Image from "next/image";
+import { PlaceHolderImages } from "@/lib/placeholder-images";
+
+export default function Home() {
+  const { user } = useAuth();
+  const heroImage = PlaceHolderImages.find(img => img.id === 'hero-health');
+
+  return (
+    <div className="min-h-screen flex flex-col">
+      <Navbar />
+      <main className="flex-1">
+        {/* Hero Section */}
+        <section className="px-6 py-16 lg:py-24 max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-center">
+          <div className="space-y-8">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-semibold">
+              <Heart className="h-4 w-4" />
+              Trusted Healthcare Partner
+            </div>
+            <h1 className="text-4xl lg:text-6xl font-headline font-bold text-foreground leading-tight">
+              Manage Your Health with <span className="text-primary">Confidence</span>
+            </h1>
+            <p className="text-xl text-muted-foreground max-w-lg">
+              HealthLink Hub provides personalized medical guidance, action items, and clear lifestyle recommendations to help you live your healthiest life.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4">
+              {user ? (
+                <Link href="/dashboard">
+                  <Button size="lg" className="w-full sm:w-auto text-lg h-14 px-8 flex items-center gap-2">
+                    Go to Dashboard <ArrowRight className="h-5 w-5" />
+                  </Button>
+                </Link>
+              ) : (
+                <>
+                  <Link href="/login">
+                    <Button size="lg" className="w-full sm:w-auto text-lg h-14 px-8">
+                      Get Started Now
+                    </Button>
+                  </Link>
+                  <Link href="#features">
+                    <Button size="lg" variant="outline" className="w-full sm:w-auto text-lg h-14 px-8">
+                      Learn More
+                    </Button>
+                  </Link>
+                </>
+              )}
+            </div>
+          </div>
+          <div className="relative aspect-video lg:aspect-square rounded-2xl overflow-hidden shadow-2xl">
+            {heroImage && (
+              <Image 
+                src={heroImage.imageUrl} 
+                alt={heroImage.description} 
+                fill 
+                className="object-cover"
+                data-ai-hint={heroImage.imageHint}
+              />
+            )}
+          </div>
+        </section>
+
+        {/* Features Section */}
+        <section id="features" className="bg-white py-20 px-6">
+          <div className="max-w-7xl mx-auto space-y-12">
+            <div className="text-center space-y-4">
+              <h2 className="text-3xl font-headline font-bold">Comprehensive Care Management</h2>
+              <p className="text-muted-foreground max-w-2xl mx-auto">
+                Everything you need to track, understand, and improve your medical well-being.
+              </p>
+            </div>
+            <div className="grid md:grid-cols-3 gap-8">
+              {[
+                {
+                  icon: <ShieldCheck className="h-10 w-10 text-primary" />,
+                  title: "Secure & Private",
+                  desc: "Your health data is encrypted and stored securely using Firestore, ensuring your privacy is never compromised."
+                },
+                {
+                  icon: <ClipboardList className="h-10 w-10 text-accent" />,
+                  title: "Medical Profiling",
+                  desc: "Easily document symptoms and conditions through our intuitive guided forms and symptom checklists."
+                },
+                {
+                  icon: <Zap className="h-10 w-10 text-yellow-500" />,
+                  title: "AI-Powered Plans",
+                  desc: "Receive personalized medication schedules and lifestyle recommendations tailored exactly to your profile."
+                }
+              ].map((feature, i) => (
+                <div key={i} className="p-8 rounded-xl border bg-background hover:shadow-md transition-shadow space-y-4">
+                  <div className="mb-4">{feature.icon}</div>
+                  <h3 className="text-xl font-bold">{feature.title}</h3>
+                  <p className="text-muted-foreground leading-relaxed">{feature.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer className="border-t bg-card py-12 px-6">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+          <div className="flex items-center gap-2 text-primary font-bold text-xl">
+            <HeartPulse className="h-6 w-6" />
+            <span>HealthLink Hub</span>
+          </div>
+          <p className="text-sm text-muted-foreground">
+            © 2024 HealthLink Hub. Your health data is protected.
+          </p>
+          <div className="flex gap-6">
+            <Link href="#" className="text-sm text-muted-foreground hover:text-primary">Privacy Policy</Link>
+            <Link href="#" className="text-sm text-muted-foreground hover:text-primary">Terms of Service</Link>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}
